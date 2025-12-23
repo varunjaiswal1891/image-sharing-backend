@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mysql://RDS_ENDPOINT:3306/imageshare
+    username: admin
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+aws:
+  s3:
+    bucket: image-share-bucket
+    region: ap-south-1
+
+jwt:
+  secret: my-super-secret-key

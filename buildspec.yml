@@ -1,0 +1,11 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - mvn clean package
+      - docker build -t image-share .
+  post_build:
+    commands:
+      - docker run -d -p 8080:8080 image-share
+      - echo "Application deployed and running"
