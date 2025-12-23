@@ -1,6 +1,0 @@
-com/image/varun/ImageUpload/model/User.class
-com/image/varun/ImageUpload/model/Image.class
-com/image/varun/ImageUpload/security/JwtUtil.class
-com/image/varun/ImageUpload/repository/ImageRepository.class
-com/image/varun/ImageUpload/ImageUploadApplication.class
-com/image/varun/ImageUpload/repository/UserRepository.class
