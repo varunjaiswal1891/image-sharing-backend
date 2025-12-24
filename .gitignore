@@ -15,3 +15,4 @@ Thumbs.db
 # Ignore dependency directories
 /node_modules/
 target/classes/
+target/classes/application.yaml

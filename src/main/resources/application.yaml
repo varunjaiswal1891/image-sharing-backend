@@ -1,11 +1,18 @@
 spring:
+  profiles:
+    active: default
   datasource:
     url: jdbc:mysql://imageshare.c76agakcmyk5.ap-south-1.rds.amazonaws.com:3306/imageshare
     username: admin
     password: Diksha$1994
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
 
 aws:
   s3:
