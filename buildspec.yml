@@ -11,17 +11,13 @@ phases:
   install:
     runtime-versions:
       java: corretto17
-    commands:
-      - echo Installing Docker...
-      - yum install -y docker
-      - service docker start
-      - echo Logging in to ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
-        docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
   pre_build:
     commands:
       - echo Build started on `date`
+      - echo Logging in to ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
+        docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - ./mvnw clean package -DskipTests
 
   build:
