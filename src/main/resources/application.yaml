@@ -18,6 +18,20 @@ server:
   port: 8080
   address: 0.0.0.0
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: always
+  health:
+    defaults:
+      enabled: true
+
 aws:
   s3:
     bucket: image-share-images-bucket
