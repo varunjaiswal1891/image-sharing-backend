@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.image.varun</groupId>
 	<artifactId>ImageUpload</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>ImageUpload-0.0.1-SNAPSHOT</version>
 	<name>ImageUpload</name>
 	<description>Image upload project</description>
 	<url/>
@@ -68,6 +68,12 @@
     </dependency>
 
     <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <optional>true</optional>
@@ -86,6 +92,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+            </plugin>
 		</plugins>
 	</build>
 
