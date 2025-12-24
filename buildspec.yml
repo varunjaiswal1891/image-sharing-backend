@@ -4,8 +4,8 @@ phases:
   build:
     commands:
       - mvn clean package -DskipTests
-      - docker build -t image-share .
+      - docker build -t image-share-backend .
   post_build:
     commands:
-      - docker run -d -p 8080:8080 image-share
+      - docker run -d -p 8080:8080 image-share-backend
       - echo "Application deployed and running"

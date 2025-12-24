@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:devdb
     username: sa
     password: 
     driver-class-name: org.h2.Driver
@@ -14,20 +14,21 @@ spring:
   h2:
     console:
       enabled: true
+      path: /h2-console
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,metrics,env
   endpoint:
     health:
       show-details: always
 
 aws:
   s3:
-    bucket: test-bucket
-    region: us-east-1
+    bucket: image-share-images-bucket
+    region: ap-south-1
 
 jwt:
   secret: my-super-secret-key-varun

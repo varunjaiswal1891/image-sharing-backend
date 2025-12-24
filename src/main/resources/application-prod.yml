@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:mysql://imageshare.c76agakcmyk5.ap-south-1.rds.amazonaws.com:3306/imageshare
+    username: admin
+    password: Diksha$1994
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+aws:
+  s3:
+    bucket: image-share-images-bucket
+    region: ap-south-1
+
+jwt:
+  secret: my-super-secret-key-varun
