@@ -1,11 +1,34 @@
 version: 0.2
 
+env:
+  variables:
+    IMAGE_REPO_NAME: image-share-backend
+    IMAGE_TAG: latest
+    #AWS_DEFAULT_REGION: ap-south-1
+    #AWS_ACCOUNT_ID: 149536493115
+
 phases:
+  install:
+    runtime-versions:
+      java: corretto17
+    commands:
+      - echo Installing Docker...
+      - yum install -y docker
+      - service docker start
+      - echo Logging in to ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
+        docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
+  pre_build:
+    commands:
+      - echo Build started on `date`
+      - ./mvnw clean package -DskipTests
+
   build:
     commands:
-      - mvn clean package -DskipTests
-      - docker build -t image-share-backend .
+      - docker build -t $IMAGE_REPO_NAME .
+      - docker tag $IMAGE_REPO_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
+
   post_build:
     commands:
-      - docker run -d -p 8080:8080 image-share-backend
-      - echo "Application deployed and running"
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
