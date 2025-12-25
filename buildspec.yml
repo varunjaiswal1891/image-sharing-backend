@@ -4,8 +4,8 @@ env:
   variables:
     IMAGE_REPO_NAME: image-share-backend
     IMAGE_TAG: latest
-    AWS_DEFAULT_REGION: ap-south-1
-    AWS_ACCOUNT_ID: 149536493115
+    #AWS_DEFAULT_REGION: ap-south-1
+    #AWS_ACCOUNT_ID: 149536493115
 
 phases:
   install:
