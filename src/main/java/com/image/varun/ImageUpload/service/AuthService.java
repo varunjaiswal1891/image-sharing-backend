@@ -16,11 +16,11 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    public String login(String email, String password) {
-        User user = userRepository.findByEmail(email)
+    public String login(String username, String password) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // password check skipped for learning
-        return jwtUtil.generateToken(email);
+        return jwtUtil.generateToken(username);
     }
 }
