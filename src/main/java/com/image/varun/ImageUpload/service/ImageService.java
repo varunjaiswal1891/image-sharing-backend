@@ -14,7 +14,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequ
 
 @Service
 public class ImageService {
-    private final String bucket = "image-share-bucket";
+    private final String bucket = "image-share-images-bucket";
 
     public UploadUrlResponse generateUploadUrl() {
         String key = "images/" + UUID.randomUUID();
@@ -26,7 +26,7 @@ public class ImageService {
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucket)
                 .key(key)
-                .contentType("image/jpeg")
+                .contentType("image/jpg")
                 .build();
 
         PresignedPutObjectRequest presigned =
