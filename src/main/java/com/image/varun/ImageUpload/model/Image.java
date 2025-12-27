@@ -5,14 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "images")
 @Getter
 @Setter
+@Table(name = "images")
 public class Image {
-     @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
-    private String s3Key;
+
+    @Column(length = 1000)
+    private String imageUrl;
+
     private String uploadedBy;
 }

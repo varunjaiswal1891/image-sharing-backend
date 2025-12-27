@@ -1,6 +1,7 @@
 package com.image.varun.ImageUpload.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +46,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             String username = jwtUtil.extractUsername(token);
+            UsernamePasswordAuthenticationToken authentication =
+             new UsernamePasswordAuthenticationToken(username, null, List.of());
+             SecurityContextHolder.getContext().setAuthentication(authentication);
+             
             // Token is valid, proceed with the filter chain
             filterChain.doFilter(request, response);
         } catch (Exception e) {
