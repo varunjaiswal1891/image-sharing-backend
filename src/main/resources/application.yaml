@@ -1,4 +1,4 @@
-# Available profiles: dev (H2 in-memory DB), prod (Amazon RDS MySQL)
+# Available profiles: dev (H2 in-memory DB), test (Amazon RDS MySQL)
 spring:
   profiles:
     active: dev
@@ -25,6 +25,9 @@ aws:
   s3:
     bucket: image-share-images-bucket
     region: ap-south-1
+  secrets:
+    region: ap-south-1
+    db-secret-name: image-share/DB
 
 jwt:
   secret: my-super-secret-key-varun
