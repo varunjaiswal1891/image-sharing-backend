@@ -1,3 +1,4 @@
+# Available profiles: dev (H2 in-memory DB), prod (Amazon RDS MySQL)
 spring:
   profiles:
     active: dev
