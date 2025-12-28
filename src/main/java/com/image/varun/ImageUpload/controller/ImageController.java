@@ -66,7 +66,7 @@ public class ImageController {
     }
 
     // 🔒 View gallery
-    @GetMapping
+    @GetMapping("/all")
     public List<Image> all() {
         return imageRepository.findAll();
     }
