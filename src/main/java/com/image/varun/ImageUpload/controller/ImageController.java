@@ -2,7 +2,11 @@ package com.image.varun.ImageUpload.controller;
 
 import com.image.varun.ImageUpload.dto.UploadUrlResponse;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,5 +104,54 @@ public class ImageController {
         List<Image> results = imageRepository.findByTitleContainingIgnoreCase(keyword);
         logger.info("Search completed - Found {} images matching keyword: {}", results.size(), keyword);
         return results;
+    }
+
+    // 🔒 Delete image
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id, Principal principal) {
+        logger.info("Delete request received - User: {}, ImageID: {}", principal.getName(), id);
+        
+        Optional<Image> imageOptional = imageRepository.findById(id);
+        
+        if (imageOptional.isEmpty()) {
+            logger.warn("Image not found - ID: {}", id);
+            return ResponseEntity.notFound().build();
+        }
+        
+        Image image = imageOptional.get();
+        
+        // Check if the user is the owner of the image
+        if (!image.getUploadedBy().equals(principal.getName())) {
+            logger.warn("Unauthorized delete attempt - User: {}, Image owner: {}", 
+                       principal.getName(), image.getUploadedBy());
+            return ResponseEntity.status(403)
+                    .body(Map.of("error", "You are not authorized to delete this image"));
+        }
+        
+        try {
+            // Extract S3 key from image URL
+            // Expected format: https://image-share-images-bucket.s3.amazonaws.com/username/timestamp_filename
+            String imageUrl = image.getImageUrl();
+            String key = imageUrl.substring(imageUrl.indexOf(".com/") + 5);
+            
+            logger.info("Deleting from S3 - Key: {}", key);
+            
+            // Delete from S3
+            s3Service.deleteObject(BUCKET_NAME, key);
+            
+            // Delete from database
+            imageRepository.deleteById(id);
+            
+            logger.info("Image deleted successfully - ID: {}, User: {}", id, principal.getName());
+            
+            return ResponseEntity.ok(Map.of(
+                    "message", "Image deleted successfully",
+                    "id", id.toString()
+            ));
+        } catch (Exception e) {
+            logger.error("Error deleting image - ID: {}, Error: {}", id, e.getMessage());
+            return ResponseEntity.status(500)
+                    .body(Map.of("error", "Failed to delete image: " + e.getMessage()));
+        }
     }
 }
