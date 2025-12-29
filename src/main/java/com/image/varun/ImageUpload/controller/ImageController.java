@@ -14,11 +14,14 @@ import com.image.varun.ImageUpload.model.Image;
 import com.image.varun.ImageUpload.repository.ImageRepository;
 import com.image.varun.ImageUpload.service.S3Service;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/images")
 public class ImageController {
     
+    private static final Logger logger = LoggerFactory.getLogger(ImageController.class);
     private static final String BUCKET_NAME = "image-share-images-bucket";
 
     private final S3Service s3Service;
@@ -37,10 +40,15 @@ public class ImageController {
             @RequestParam(defaultValue = "image/jpeg") String contentType,
             Principal principal) {
 
+        logger.info("Presign request received - User: {}, Filename: {}, ContentType: {}", 
+                    principal.getName(), filename, contentType);
+
         String key =
                 principal.getName() + "/" +
                 System.currentTimeMillis() + "_" +
                 filename;
+
+        logger.info("Generated S3 key: {}", key);
 
         String uploadUrl =
                 s3Service.generatePresignedUploadUrl(
@@ -52,6 +60,8 @@ public class ImageController {
         String imageUrl =
                 "https://" + BUCKET_NAME + ".s3.amazonaws.com/" + key;
 
+        logger.info("Presigned URL generated successfully for key: {}", key);
+
         return Map.of(
                 "uploadUrl", uploadUrl,
                 "imageUrl", imageUrl,
@@ -62,19 +72,33 @@ public class ImageController {
     // 🔒 Step 2: Save metadata
     @PostMapping("/save")
     public Image save(@RequestBody Image image, Principal principal) {
+        logger.info("Save image metadata request - User: {}, Title: {}, ImageUrl: {}", 
+                    principal.getName(), image.getTitle(), image.getImageUrl());
+        
         image.setUploadedBy(principal.getName());
-        return imageRepository.save(image);
+        Image savedImage = imageRepository.save(image);
+        
+        logger.info("Image metadata saved successfully - ID: {}, User: {}", 
+                    savedImage.getId(), savedImage.getUploadedBy());
+        
+        return savedImage;
     }
 
     // 🔒 View gallery
     @GetMapping("/all")
     public List<Image> all() {
-        return imageRepository.findAll();
+        logger.info("Fetching all images from gallery");
+        List<Image> images = imageRepository.findAll();
+        logger.info("Retrieved {} images from gallery", images.size());
+        return images;
     }
 
     // 🔒 Search
     @GetMapping("/search")
     public List<Image> search(@RequestParam String keyword) {
-        return imageRepository.findByTitleContainingIgnoreCase(keyword);
+        logger.info("Search request received - Keyword: {}", keyword);
+        List<Image> results = imageRepository.findByTitleContainingIgnoreCase(keyword);
+        logger.info("Search completed - Found {} images matching keyword: {}", results.size(), keyword);
+        return results;
     }
 }
