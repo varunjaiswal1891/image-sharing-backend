@@ -31,10 +31,10 @@ public class ImageController {
     }
 
     // 🔒 Step 1: Get presigned URL
-    @PostMapping("/presign")
+    @GetMapping("/presign")
     public Map<String, String> presign(
             @RequestParam String filename,
-            @RequestParam(defaultValue = "image/jpg") String contentType,
+            @RequestParam(defaultValue = "image/jpeg") String contentType,
             Principal principal) {
 
         String key =
@@ -54,7 +54,8 @@ public class ImageController {
 
         return Map.of(
                 "uploadUrl", uploadUrl,
-                "imageUrl", imageUrl
+                "imageUrl", imageUrl,
+                "contentType", contentType
         );
     }
 
