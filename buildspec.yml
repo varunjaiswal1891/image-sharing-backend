@@ -31,8 +31,11 @@ phases:
   post_build:
     commands:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
-
+      - echo "ARTIFACT CONTENTS:"
+      - ls -la
 artifacts:
   files:
     - appspec.yml
-    - scripts/*
+    - scripts/**/*
+  discard-paths: no
+
