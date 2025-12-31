@@ -1,5 +1,5 @@
 #!/bin/bash
 set +e
-docker stop image-app || true
-docker rm image-app || true
-echo "Container 'image-app' has been stopped and removed."
+docker stop image-share-backend || true
+docker rm image-share-backend || true
+echo "Container 'image-share-backend' has been stopped and removed."
