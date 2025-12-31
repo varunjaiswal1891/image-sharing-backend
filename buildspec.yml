@@ -18,6 +18,7 @@ phases:
       - pwd
       - ls -la
       - chmod +x mvnw
+      - chmod +x scripts/*.sh
       - echo Logging in to ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
         docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com

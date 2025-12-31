@@ -6,11 +6,12 @@ files:
     destination: /home/ec2-user/app
 
 hooks:
-  BeforeInstall:
-    - location: scripts/stop_container.sh
-      timeout: 60
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 300
       runas: ec2-user
-  AfterInstall:
-    - location: scripts/start_container.sh
+
+  ApplicationStart:
+    - location: scripts/start.sh
       timeout: 300
       runas: ec2-user
