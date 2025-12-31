@@ -21,7 +21,6 @@ phases:
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
         docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - chmod +x mvnw
-      - chmod +x scripts/*.sh
       - ./mvnw clean package -DskipTests
 
   build:
@@ -32,8 +31,10 @@ phases:
   post_build:
     commands:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
-      - echo "ARTIFACT CONTENTS:"
-      - ls -la
+      - echo Build completed on `date`
+      - printf '[{"name":"image-share-backend","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest > imagedefinitions.json
+      - cat imagedefinitions.json
 
 artifacts:
-  files: []
+  files:
+    - imagedefinitions.json
