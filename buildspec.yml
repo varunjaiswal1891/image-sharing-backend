@@ -17,11 +17,11 @@ phases:
       - echo Build started on `date`
       - pwd
       - ls -la
-      - chmod +x mvnw
-      - chmod +x scripts/*.sh
       - echo Logging in to ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION |
         docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - chmod +x mvnw
+      - chmod +x scripts/*.sh
       - ./mvnw clean package -DskipTests
 
   build:
@@ -34,9 +34,6 @@ phases:
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:latest
       - echo "ARTIFACT CONTENTS:"
       - ls -la
-artifacts:
-  files:
-    - appspec.yml
-    - scripts/**/*
-  discard-paths: no
 
+artifacts:
+  files: []
